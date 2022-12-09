@@ -1,0 +1,7 @@
+Single cpp file REWL code for a 6x6 Ising model 
+Code has been updated from original to be able to accept arbitrary bounds for energy
+
+Parameters for Best Results
+
+mpiCC -o (NAME) Ising.cpp (-lm may be needed for Linux systems)
+mpirun -np 3 ./(NAME) 1 1 10 07891
