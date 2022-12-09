@@ -1,3 +1,6 @@
+// Heavily modified version of original code disributed by Ying Wai Li (below) Distributed under same liscense 
+// note changes made and provide approopriate credit
+
 /*
   Replica Exchange Wang Landau demo code for simulating the 2D Potts model
   (c) Thomas Vogel and Ying Wai Li (2013-2019)
