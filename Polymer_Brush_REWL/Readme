@@ -1,0 +1,4 @@
+######## Compiling Unix ######
+mpiCC -o (NAME) EXWL.cpp Moc.cpp Energy.cpp General.cpp Constants.cpp Main.cpp
+
+(Linux systems may require -lm at end)
