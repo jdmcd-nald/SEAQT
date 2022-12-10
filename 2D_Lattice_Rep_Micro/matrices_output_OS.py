@@ -27,9 +27,8 @@ viridis = cm.get_cmap('viridis', 10)
 newcolors = viridis(np.linspace(0, 1, 10))
 pink = np.array([170/256, 170/256, 170/256, 1])
 
-pink = np.array([1, 1, 1, 1])
-pink = np.array([170/256, 170/256, 170/256, 1])
-pink = np.array([.281412, .155834, .469201, 1])
+#pink = np.array([1, 1, 1, 1])
+#pink = np.array([170/256, 170/256, 170/256, 1])
 pink = np.array([.281412, .155834, .469201, 1])
 newcolors[:1, :] = pink
 newcmp = ListedColormap(newcolors)
@@ -61,7 +60,7 @@ def colored(matrix):
     return new_matrix
     
 plt.rcParams['font.size'] = '15'
-path = "C:\\Users\\yello\\Downloads\\Final Additions\\OR\\New folder\\"
+path = os.getcwd()
 files = os.listdir(path) #Save the data in the folder Data
 # matrices = []
 for file in files:
