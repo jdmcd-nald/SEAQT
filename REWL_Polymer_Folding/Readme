@@ -1,0 +1,5 @@
+Concepted 2020 and Finalized 2021
+Polymer Folding REWL independently developed from Ising code included in the directory
+
+Best Runtime Parameters
+mpirun -np 9 ./EXE 0.8 1 100 51604 6 3 0
