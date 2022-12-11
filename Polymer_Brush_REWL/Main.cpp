@@ -295,6 +295,14 @@ void output_lattice(int index,double rog,double tort,int dx[numbercores*pertrusi
 
 void init_output()
 {
+	if(fopen("RepData_80.txt", "r")==NULL)
+	{
+		stdoutlog = fopen(stdoutlogname, "a");
+                                fprintf(stdoutlog, "No Input file for Rep Micro Outputs found \n");
+                                fclose(stdoutlog);
+		output_choice=0;
+			return;
+	}
 	FILE* fptr;
 	fptr = fopen("RepData_80.txt", "r");
 	int out_counter = 0;
