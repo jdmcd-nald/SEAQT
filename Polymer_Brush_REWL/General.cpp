@@ -98,7 +98,7 @@ int anint(float c)
     return 0;
 }
 
-void init_poly_cores()
+void init_poly_cores(int en_choice)
 {
     int mix_counter=0;
     
@@ -437,7 +437,7 @@ void init_poly_cores()
     fprintf(stdoutlog, "created place holders init poly_core()\n");
     fclose(stdoutlog);
     
-    init_en_and_dist_array();
+    init_en_and_dist_array(en_choice);
     
     stdoutlog = fopen(stdoutlogname, "a");
     fprintf(stdoutlog, "Called distance array init poly_core()\n");
@@ -644,6 +644,24 @@ double poly_point_distance(int* poly_lattice_coordinates,int polymer_position_1,
     }
 
     return dist_array[0][0][0];
+}
+
+
+void init_en_and_dist_array(int en_choice)
+{
+    swtich(en_choice) {
+        case 0:
+            init_en_and_dist_array_cyclo()
+        break;
+        case 1:
+            init_en_and_dist_array_FH_minus()
+        break;
+        case 2:
+            init_en_and_dist_array_FH_plus()
+        break;
+        default:
+            init_en_and_dist_array_cyclo()
+    }
 }
 
 void init_en_and_dist_array_FH_minus()
