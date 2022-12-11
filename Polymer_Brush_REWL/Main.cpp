@@ -508,7 +508,7 @@ void init_lattice(double emin, double emax) // Changes made to bctype check and 
     stdoutlog = fopen(stdoutlogname, "a");
        fprintf(stdoutlog, "Made it to polycore()\n");
        fclose(stdoutlog);
-    init_poly_cores();
+    init_poly_cores(en_choice);
     stdoutlog = fopen(stdoutlogname, "a");
     fprintf(stdoutlog, "Left init polycore()\n");
     fclose(stdoutlog);
