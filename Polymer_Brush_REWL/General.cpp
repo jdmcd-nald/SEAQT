@@ -200,180 +200,162 @@ void init_poly_cores()
 
  optomize();
 
-//    int new_index;
-//    for(int i=0;i<numbercores*pertrusionpercore;i++)
-//    {
-//        poly_latticepoint_clear(poly_lattice_indexes, i*lengthpercore*pertrusionpercore, (1+i)*lengthpercore*pertrusionpercore); // clears all of the lattice points between the two axis points
-//        stdoutlog = fopen(stdoutlogname, "a");
-//        fprintf(stdoutlog, "base %i\n",poly_lattice_indexes[i*pertrusionpercore*lengthpercore]);
-//        fclose(stdoutlog);
-//        for(int j=1;j<lengthpercore;j++)
-//        {
-//            int counter = 0;
-//            int diff1= 46-73+1;
-//            int randstart = rand()%(diff1);
-//            int assignable=0;
-//            while(counter<diff1 && assignable!=1)
-//            {
-//                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff1+74];
-
-//                if(new_index<(L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
-//                {
-//                    assignable = latticepoint_assign2(new_index,1);
-//                }
-//                if(assignable)
-//                {
-//                    stdoutlog = fopen(stdoutlogname, "a");
-//                    fprintf(stdoutlog, "assigned 1 %i  %i\n",new_index,assignable);
-//                    fclose(stdoutlog);
-//                }
-
-//                counter++;
-//            }
-
-//            int diff2= 74-93+1;
-//            counter = 0;
-//            randstart = rand()%(diff2);
-//            while(counter<diff2 && assignable!=1)
-//            {
-//                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff2+74];
-
-//                if(new_index>(L1dim_S_xy*L1dim_S_xy*10))
-//                {
-//                    if(new_index<(L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
-//                    {
-//                           assignable = latticepoint_assign2(new_index,1);
-//                    }
-//                }
-//                else
-//                {
-//                    assignable = 0;
-//                }
-
-//                if(assignable)
-//                {
-//                    stdoutlog = fopen(stdoutlogname, "a");
-//                    fprintf(stdoutlog, "assigned 2 %i %i\n",new_index,assignable);
-//                    fclose(stdoutlog);
-//                }
-//                counter++;
-//            }
-
-//            int diff3= 94-119+1;
-//            randstart = rand()%(diff3);
-//            while(counter<diff3 && assignable!=1)
-//            {
-//                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff3+94];
-//                if(new_index>
-//                (L1dim_S_xy*L1dim_S_xy*10))
-//                {
-//                    if(new_index<
-//                    (L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
-//                    {
-//                    assignable = latticepoint_assign2(new_index,1);
-//                     }
-//                }
-//                else{
-//                    assignable = 0;
-//                }
-
-//                if(assignable) {
-//                    stdoutlog = fopen(stdoutlogname, "a");
-//                        fprintf(stdoutlog, "assigned 3 %i  %i\n",new_index,assignable);
-//                    fclose(stdoutlog);
-//                }
-//                counter++;
-//            }
-
-//            int diff4= 0-45+1;
-//            counter = 0;
-//            randstart = rand()%(diff4);
-//            while(counter<diff4 && assignable!=1)
-//            {
-//                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff4+0];
-//                assignable = latticepoint_assign2(new_index,1);
-//                if(assignable) {
-//                    stdoutlog = fopen(stdoutlogname, "a");
-//                    fprintf(stdoutlog, "assigned 4 %i  %i\n",new_index,assignable);
-//                    fclose(stdoutlog);
-//                }
-//                counter++;
-//            }
-
-//            if(assignable)
-//            {
-//                latticepoint_assign(new_index,1);
-//                poly_lattice_indexes[(i*lengthpercore)+j]=new_index;
-//                stdoutlog = fopen(stdoutlogname, "a");
-//                fprintf(stdoutlog, "guess assign %i,%i,%i\n",i,j,new_index);
-//                fclose(stdoutlog);
-//            }
-//            else{
-
-
-//                stdoutlog = fopen(stdoutlogname, "a");
-//                fprintf(stdoutlog, "couldnt assign %i,%i,%i\n",i,j,new_index);
-//                fclose(stdoutlog);
-
-//                while(assignable==0)
-//                {
-//                    stdoutlog = fopen(stdoutlogname, "a");
-//                    fprintf(stdoutlog, "trying again %i  %i\n",i,j);
-//                    fclose(stdoutlog);
-
-//                    poly_latticepoint_clear(poly_lattice_indexes, i*lengthpercore*pertrusionpercore, (1+i)*lengthpercore*pertrusionpercore); // clears all of the lattice points between the two axis points
-//                    stdoutlog = fopen(stdoutlogname, "a");
-//                    fprintf(stdoutlog, "ta base %i\n",poly_lattice_indexes[i*pertrusionpercore*lengthpercore]);
-//                    fclose(stdoutlog);
-//                    for(int k=1;k<=j;k++)
-//                    {
-//                        int counter = 0;
-//                        int randstart = rand()%(120);
-//                        assignable=0;
-//                        while(counter<120 && assignable!=1)
-//                        {
-//                            new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+k-1]*120+(randstart+counter)%120+0];
-//                            if(new_index< (L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
-//                            {
-//                                if(new_index>L1dim_S_xy*L1dim_S_xy*6)
-//                                {
-//                                    assignable = latticepoint_assign2(new_index,1);
-//                                }
-//                            }
-//                            if(assignable) {
-//                                stdoutlog = fopen(stdoutlogname, "a");
-//                                fprintf(stdoutlog, "assigned ta %i  %i\n",new_index,assignable);
-//                                fclose(stdoutlog);
-//                            }
-//                            counter++;
-//                        }
-
-//                        if(assignable)
-//                        {
-//                            latticepoint_assign(new_index,1);
-//                            poly_lattice_indexes[(i*lengthpercore)+k]=new_index;
-
-//                            stdoutlog = fopen(stdoutlogname, "a");
-//                            fprintf(stdoutlog, "TA guess assign %i,%i,%i\n",i,k,new_index);
-//                            fclose(stdoutlog);
-//                        }
-//                        else{
-//                         stdoutlog = fopen(stdoutlogname, "a");
-//                            fprintf(stdoutlog, "restart ...\n");
-//                            fclose(stdoutlog);
-
-//                            break;
-//                        }
-//                    }
-//                }
+    int new_index;
+    for(int i=0;i<numbercores*pertrusionpercore;i++)
+    {
+        poly_latticepoint_clear(poly_lattice_indexes, i*lengthpercore*pertrusionpercore, (1+i)*lengthpercore*pertrusionpercore); // clears all of the lattice points between the two axis points
+        stdoutlog = fopen(stdoutlogname, "a");
+        fprintf(stdoutlog, "base %i\n",poly_lattice_indexes[i*pertrusionpercore*lengthpercore]);
+        fclose(stdoutlog);
+        for(int j=1;j<lengthpercore;j++)
+        {
+            int counter = 0;
+            int diff1= 46-73+1;
+            int randstart = rand()%(diff1);
+            int assignable=0;
+            while(counter<diff1 && assignable!=1)
+            {
+                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff1+74];
+                if(new_index<(L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
+                {
+                    assignable = latticepoint_assign2(new_index,1);
+                }
+                if(assignable)
+                {
+                    stdoutlog = fopen(stdoutlogname, "a");
+                    fprintf(stdoutlog, "assigned 1 %i  %i\n",new_index,assignable);
+                    fclose(stdoutlog);
+                }
+                counter++;
+            }
+            int diff2= 74-93+1;
+            counter = 0;
+            randstart = rand()%(diff2);
+            while(counter<diff2 && assignable!=1)
+            {
+                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff2+74];
+                if(new_index>(L1dim_S_xy*L1dim_S_xy*10))
+                {
+                    if(new_index<(L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
+                    {
+                           assignable = latticepoint_assign2(new_index,1);
+                    }
+                }
+               else
+                {
+                    assignable = 0;
+                }
+                if(assignable)
+                {
+                    stdoutlog = fopen(stdoutlogname, "a");
+                    fprintf(stdoutlog, "assigned 2 %i %i\n",new_index,assignable);
+                    fclose(stdoutlog);
+                }
+                counter++;
+            }
+            int diff3= 94-119+1;
+            randstart = rand()%(diff3);
+            while(counter<diff3 && assignable!=1)
+            {
+                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff3+94];
+                if(new_index>
+                (L1dim_S_xy*L1dim_S_xy*10))
+                {
+                    if(new_index<
+                    (L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
+                    {
+                    assignable = latticepoint_assign2(new_index,1);
+                     }
+                }
+               else{
+                    assignable = 0;
+                }
+                if(assignable) {
+                    stdoutlog = fopen(stdoutlogname, "a");
+                        fprintf(stdoutlog, "assigned 3 %i  %i\n",new_index,assignable);
+                    fclose(stdoutlog);
+                }
+                counter++;
+            }
+            int diff4= 0-45+1;
+            counter = 0;
+            randstart = rand()%(diff4);
+           while(counter<diff4 && assignable!=1)
+           {
+               new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff4+0];
+               assignable = latticepoint_assign2(new_index,1);
+                if(assignable) {
+                    stdoutlog = fopen(stdoutlogname, "a");
+                    fprintf(stdoutlog, "assigned 4 %i  %i\n",new_index,assignable);
+                    fclose(stdoutlog);
+                }
+                counter++;
+            }
+            if(assignable)
+            {
+                latticepoint_assign(new_index,1);
+                poly_lattice_indexes[(i*lengthpercore)+j]=new_index;
+                stdoutlog = fopen(stdoutlogname, "a");
+                fprintf(stdoutlog, "guess assign %i,%i,%i\n",i,j,new_index);
+                fclose(stdoutlog);
+            }
+            else{
+                stdoutlog = fopen(stdoutlogname, "a");
+                fprintf(stdoutlog, "couldnt assign %i,%i,%i\n",i,j,new_index);
+                fclose(stdoutlog);
+                while(assignable==0)
+                {
+                    stdoutlog = fopen(stdoutlogname, "a");
+                    fprintf(stdoutlog, "trying again %i  %i\n",i,j);
+                    fclose(stdoutlog);
+                    poly_latticepoint_clear(poly_lattice_indexes, i*lengthpercore*pertrusionpercore, (1+i)*lengthpercore*pertrusionpercore); // clears all of the lattice points between the two axis points
+                    stdoutlog = fopen(stdoutlogname, "a");
+                    fprintf(stdoutlog, "ta base %i\n",poly_lattice_indexes[i*pertrusionpercore*lengthpercore]);
+                    fclose(stdoutlog);
+                    for(int k=1;k<=j;k++)
+                    {
+                        int counter = 0;
+                        int randstart = rand()%(120);
+                        assignable=0;
+                        while(counter<120 && assignable!=1)
+                        {
+                            new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+k-1]*120+(randstart+counter)%120+0];
+                            if(new_index< (L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
+                            {
+                                if(new_index>L1dim_S_xy*L1dim_S_xy*6)
+                                {
+                                    assignable = latticepoint_assign2(new_index,1);
+                                }
+                            }
+                            if(assignable) {
+                                stdoutlog = fopen(stdoutlogname, "a");
+                                fprintf(stdoutlog, "assigned ta %i  %i\n",new_index,assignable);
+                                fclose(stdoutlog);
+                            }
+                            counter++;
+                        }
+                        if(assignable)
+                        {
+                            latticepoint_assign(new_index,1);
+                            poly_lattice_indexes[(i*lengthpercore)+k]=new_index;
+                            stdoutlog = fopen(stdoutlogname, "a");
+                            fprintf(stdoutlog, "TA guess assign %i,%i,%i\n",i,k,new_index);
+                            fclose(stdoutlog);
+                        }
+                        else{
+                         stdoutlog = fopen(stdoutlogname, "a");
+                            fprintf(stdoutlog, "restart ...\n");
+                            fclose(stdoutlog);
+                            break;
+                        }
+                    }
+                }
 
 
-
-
-//                //MPI_Abort(MPI_COMM_WORLD,1);
-//            }
-//        }
-//    }
+               //MPI_Abort(MPI_COMM_WORLD,1);
+            }
+        }
+    }
 
 
     stdoutlog = fopen(stdoutlogname, "a");
