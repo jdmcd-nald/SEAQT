@@ -278,57 +278,208 @@ void sysparam(int);
 int local_energy(int* p_l_c,int* p_l_i, int* s_l);
 
 void init_output();
-void output_lattice(int index,double rog,double tort,int dx[numbercores*pertrusionpercore*lengthpercore],int dy[numbercores*pertrusionpercore*lengthpercore],int dz[numbercores*pertrusionpercore*lengthpercore]);
+double* output_table;
+int* number;
+double* output_reducing;
+
+double* dp_compare;
+double* dps_compare;
+
+int table_length=0;
+void init_output();
+void output_lattice(int index,double rog,double tort,int dx[numbercores*pertrusionpercore*lengthpercore],int dy[numbercores*pertrusionpercore*lengthpercore],int dz[numbercores*pertrusionpercore*lengthpercore],double fakeDP[L1dim_S_z],double fakeDPS[L1dim_S_z],int yy);
 
 void init_output()
 {
 	FILE* fptr;
-	fptr = fopen("Combined_58mer.txt", "r");
+	fptr = fopen("RepData_80.txt", "r");
 	int out_counter = 0;
-	int value;
+	double value;
 	double valuee;
 	double valueee;
-	while (fscanf(fptr, "%i,%lf,%lf\n", &value, &valuee, &valueee) > 0)
-    {
-            fprintf(stdoutlog, "init_output1 %i: %i %f %f\n",out_counter, value, valuee,valueee);
+	while (fscanf(fptr, "%lf\t%lf\t%lf\n", &value, &valuee, &valueee) > 0)
+    	{
+    	stdoutlog = fopen(stdoutlogname, "a");
+            				
+            fprintf(stdoutlog, "init_output1 %i: %f %f %f\n",out_counter, value, valuee,valueee);
+            
+            				fclose(stdoutlog);
             out_counter++;
 	}
 	fclose(fptr);
 
     output_table = (double*)malloc((out_counter+1) * 4 * sizeof(double));
     
-    fptr = fopen("Combined_58mer.txt", "r");
-	out_counter = 0;
-	value =0;
-	valuee =0;
-	valueee =0;
-	while (fscanf(fptr, "%i,%lf,%lf\n", &value, &valuee, &valueee) > 0)
+    output_reducing = (double*)malloc((out_counter+1) * sizeof(double));
+    table_length = out_counter;
+    number = (int*)malloc(table_length * sizeof(int));
+    for(int i =0;i<table_length;i++)
     {
-            output_table[out_counter*4+0] = value;
+    	number[i]=0;
+    }
+    
+    fptr = fopen("RepData_80.txt", "r");
+	out_counter = 0;
+	value;
+	valuee;
+	valueee;
+	while (fscanf(fptr, "%lf\t%lf\t%lf\n", &value, &valuee, &valueee) > 0)
+    {
+            output_table[out_counter*4+0] = ((int)value)-Eglobalmin;
             output_table[out_counter*4+1] = valuee;
             output_table[out_counter*4+2] = valueee;
-            fprintf(stdoutlog, "init_output2 %i: %f %f %f\n", out_counter,output_table[out_counter*4+0], output_table[out_counter*4+1],valueee);
+            output_table[out_counter*4+3] = 0;
+            output_reducing[out_counter] = .5;
+            stdoutlog = fopen(stdoutlogname, "a");
+            fprintf(stdoutlog, "init_output2 %i: %f %f %f\n", out_counter,output_table[out_counter*4+0], output_table[out_counter*4+1],output_table[out_counter*4+2]);
+            fclose(stdoutlog);
+            
+            out_counter++;
 	}
-	fclose(fptr);    
+	fclose(fptr); 
+	
+	dp_compare = (double*)malloc((out_counter) * L1dim_S_z * sizeof(double));
+	
+	
+	fptr = fopen("DPData_80.txt", "r");
+	int dp_counter = L1dim_S_z;
+	double p1dP;
+	double p2dP;
+	double p3dP;
+	double p4dP;
+	double p5dP;
+	double p6dP;
+	while (fscanf(fptr, "%lf\t%lf\t%lf\t%lf\t%lf\t%lf\n", &p1dP, &p2dP, &p3dP, &p4dP, &p5dP, &p6dP) > 0)
+    	{
+    	stdoutlog = fopen(stdoutlogname, "a");
+            			dp_counter--;	
+            fprintf(stdoutlog, "dp points %i: %2.2e %2.2e %2.2e %2.2e %2.2e %2.2e\n",dp_counter,p1dP, p2dP,p3dP,p4dP,p5dP,p6dP);
+            
+            				fclose(stdoutlog);
+            				
+            				
+            				dp_compare[0*L1dim_S_z+dp_counter]=p1dP;
+            				dp_compare[1*L1dim_S_z+dp_counter]=p2dP;
+            				dp_compare[2*L1dim_S_z+dp_counter]=p3dP;
+            				dp_compare[3*L1dim_S_z+dp_counter]=p4dP;
+            				dp_compare[4*L1dim_S_z+dp_counter]=p5dP;
+            				dp_compare[5*L1dim_S_z+dp_counter]=p6dP;
+            				
+            				stdoutlog = fopen(stdoutlogname, "a");
+            				fprintf(stdoutlog, "dpc points %i: %f %f %f %f %f %f\n",dp_counter, dp_compare[0*L1dim_S_z+dp_counter],dp_compare[1*L1dim_S_z+dp_counter], dp_compare[2*L1dim_S_z+dp_counter],dp_compare[3*L1dim_S_z+dp_counter], dp_compare[4*L1dim_S_z+dp_counter],dp_compare[5*L1dim_S_z+dp_counter]);
+            				fclose(stdoutlog);
+            				
+            
+	}
+	fclose(fptr);
+	
+	dps_compare = (double*)malloc((out_counter) * L1dim_S_z * sizeof(double));
+	
+	
+	fptr = fopen("DPSData_80.txt", "r");
+	int dps_counter = L1dim_S_z;
+	double p1dPs;
+	double p2dPs;
+	double p3dPs;
+	double p4dPs;
+	double p5dPs;
+	double p6dPs;
+	while (fscanf(fptr, "%lf\t%lf\t%lf\t%lf\t%lf\t%lf\n", &p1dPs, &p2dPs, &p3dPs, &p4dPs, &p5dPs, &p6dPs) > 0)
+    	{
+    	dps_counter--;
+    	stdoutlog = fopen(stdoutlogname, "a");
+            				
+            fprintf(stdoutlog, "dps points %i: %f %f %f %f %f %f\n",dps_counter,p1dPs, p2dPs,p3dPs,p4dPs,p5dPs,p6dPs);
+            
+            				fclose(stdoutlog);
+            				
+            				
+            				dps_compare[0*L1dim_S_z+dps_counter]=p1dPs;
+            				dps_compare[1*L1dim_S_z+dps_counter]=p2dPs;
+            				dps_compare[2*L1dim_S_z+dps_counter]=p3dPs;
+            				dps_compare[3*L1dim_S_z+dps_counter]=p4dPs;
+            				dps_compare[4*L1dim_S_z+dps_counter]=p5dPs;
+            				dps_compare[5*L1dim_S_z+dps_counter]=p6dPs;
+            				
+            				stdoutlog = fopen(stdoutlogname, "a");
+            				fprintf(stdoutlog, "dpsc points %i: %f %f %f %f %f %f\n",dps_counter, dps_compare[0*L1dim_S_z+dps_counter],dps_compare[1*L1dim_S_z+dps_counter], dps_compare[2*L1dim_S_z+dps_counter],dps_compare[3*L1dim_S_z+dps_counter], dps_compare[4*L1dim_S_z+dps_counter],dps_compare[5*L1dim_S_z+dps_counter]);
+            				fclose(stdoutlog);
+            
+	}
+	fclose(fptr);
+	
+	
+	//MPI_Abort(MPI_COMM_WORLD, 1);   
 }
 
-void output_lattice(int index,double rog,double tort,int dx[numbercores*pertrusionpercore*lengthpercore],int dy[numbercores*pertrusionpercore*lengthpercore],int dz[numbercores*pertrusionpercore*lengthpercore])
+void output_lattice(int index,double rog,double tort,int dx[numbercores*pertrusionpercore*lengthpercore],int dy[numbercores*pertrusionpercore*lengthpercore],int dz[numbercores*pertrusionpercore*lengthpercore],double fakeDP[L1dim_S_z],double fakeDPS[L1dim_S_z],int yy)
 {
 	int break_statement = 0;
 	int i =0;
 	while(break_statement ==0 && i<table_length)
 	{
-		if(((int)(((double)index)*.95))>output_table[4*i+0] && ((int)(((double)index)*1.05))<output_table[4*i+0])
+		if(((int)(((double)index)*.975))<output_table[4*i+0] && ((int)(((double)index)*1.025))>output_table[4*i+0])
 		{
-			if(((int)output_table[4*i+3])%100==0 )
+			
+			
+			if(((int)output_table[4*i+3])%10000==0 )
 			{
-				if(((int)(((double)rog)*.9))>output_table[4*i+1] && ((int)(((double)rog)*1.1))<output_table[4*i+1])
+			
+			int check=1;
+			int mercy=0;
+			for(int ii=0;ii<L1dim_S_z;ii++)
+			{
+			
+			int check2=1;
+            			if(ii%2 == 0 &&fakeDP[ii] < .002*2 && dp_compare[i*L1dim_S_z+ii] >= .01)
 				{
-					if(((int)(((double)tort)*.9))>output_table[4*i+2] && ((int)(((double)tort)*1.1))<output_table[4*i+2])
+					check =0;
+					check2 =0;
+				}
+				
+				if(ii%2 == 0 &&fakeDP[ii] >= .01 && dp_compare[i*L1dim_S_z+ii] < .002*2)
+				{
+					check =0;
+					check2 =0;
+				}
+            
+				if((fakeDP[ii] > .002 && dp_compare[i*L1dim_S_z+ii] > .002) && (fakeDP[ii]<0.1*dp_compare[i*L1dim_S_z+ii] || (fakeDP[ii])>1.25*dp_compare[i*L1dim_S_z+ii]))
+				{
+					check =0;
+					check2=0;
+				}
+				
+				if(check2 == 1)
+				{
+					mercy++;
+					
+				}
+				
+//			if(fakeDP[ii] != 0 && fakeDP[ii] >= .01 && (fakeDP[ii]<0.5*dp_compare[i*L1dim_S_z+ii] || (fakeDP[ii])>1.5*dp_compare[i*L1dim_S_z+ii]))
+//				{
+//					check =0;
+//				}
+			}
+			
+			if(mercy>=L1dim_S_z-3) check==1;
+			
+				if(check == 1 && ((int)(((double)rog)*(1-output_reducing[i])))<=output_table[4*i+1] && ((int)(((double)rog)*(1+output_reducing[i])))>=output_table[4*i+1])
+				{
+					if(((int)(((double)tort)*(1-output_reducing[i])))<=output_table[4*i+2] && ((int)(((double)tort)*(1+output_reducing[i])))>=output_table[4*i+2])
 					{
+					
+					for(int ii=0;ii<L1dim_S_z;ii++)
+			{
+			
+					stdoutlog = fopen(stdoutlogname, "a");
+			 fprintf(stdoutlog, "utt0 %i: :DP: %2.2e %2.2e :DPS: %2.2e  %2.2e bool %i %i \n",ii, fakeDP[ii],dp_compare[i*L1dim_S_z+ii], fakeDPS[ii],dps_compare[i*L1dim_S_z+ii],(ii%2 == 0 && fakeDP[ii] < .002 && dp_compare[i*L1dim_S_z+ii] >= .005),((fakeDP[ii]<0.2*dp_compare[i*L1dim_S_z+ii] || (fakeDP[ii])>2*dp_compare[i*L1dim_S_z+ii])));
+fclose(stdoutlog);
+}
+					
+					
 						int summed_diff[3] = {0,0,0};
         				int arm = 0;
-        				sprintf(filename, "Output_%i_%f_Chain_CCords_Proc%i_%i_%i.txt",i,output_table[4*i+0],myid,numbercores,lengthpercore);
+        				sprintf(filename, "Output_%i_%f_Chain_CCords_Proc%i_%i_%i.data",i,output_table[4*i+0],myid,(int) (100000*output_reducing[i]),number[i]);
         				if ((file = fopen(filename, "w")) == NULL)
         				{
             				stdoutlog = fopen(stdoutlogname, "a");
@@ -338,19 +489,19 @@ void output_lattice(int index,double rog,double tort,int dx[numbercores*pertrusi
         				}
         				else
         				{
-            				for (int i = 0; i < numbercores*pertrusionpercore*lengthpercore; i++)
+            				for (int ii = 0; ii < numbercores*pertrusionpercore*lengthpercore; ii++)
             				{
                					summed_diff[0]=poly_lattice_coordinates[3 * (arm*lengthpercore)];
                 				summed_diff[1]=poly_lattice_coordinates[3 * (arm*lengthpercore) + 1];
                 				summed_diff[2]=poly_lattice_coordinates[3 * (arm*lengthpercore) + 2];
 
-                				summed_diff[0]+=dx[i];
-                				summed_diff[1]+=dy[i];
-                				summed_diff[2]+=dz[i];
+                				summed_diff[0]+=dx[ii];
+                				summed_diff[1]+=dy[ii];
+                				summed_diff[2]+=dz[ii];
 
                 				fprintf(file, "%i\t%i\t%i\n",  summed_diff[0], summed_diff[1], summed_diff[2]);
 
-                				if((i+1)%lengthpercore==0)
+                				if((ii+1)%lengthpercore==0)
                 				{
                     				arm++;
                 				}
@@ -360,7 +511,7 @@ void output_lattice(int index,double rog,double tort,int dx[numbercores*pertrusi
 
 
 						int s_array[3]= {0};
-            			sprintf(filename, "Output_%i_%f_Solvent_CCords_Proc%i_%i_%i.txt",i,output_table[4*i+0],myid,numbercores,lengthpercore);
+            			sprintf(filename, "Output_%i_%f_Chain_CCords_Proc%i_%i_%i.datas",i,output_table[4*i+0],myid,(int) (100000*output_reducing[i]),number[i]);
             			if ((file = fopen(filename, "w")) == NULL)
             			{
                 			stdoutlog = fopen(stdoutlogname, "a");
@@ -370,15 +521,31 @@ void output_lattice(int index,double rog,double tort,int dx[numbercores*pertrusi
             			}
             			else
             			{
-                			for (int i = 0; i < no_solvent_sites; i++)
+                			for (int ii = 0; ii < no_solvent_sites; ii++)
                 			{
-                        		general_coord(s_array,solvent_loc[i]);
+                        		general_coord(s_array,solvent_loc[ii]);
 								fprintf(file, "%i\t%i\t%i\n",  s_array[0], s_array[1], s_array[2]);
 							}
             			}
             			fclose(file);
 						
 						break_statement=1;
+						number[i]++;
+						double reduced_check = output_reducing[i]/2;
+						
+						if(((int)(((double)rog)*(1-reduced_check)))<=output_table[4*i+1] && ((int)(((double)rog)*(1+reduced_check)))>=output_table[4*i+1])
+						{
+							if(((int)(((double)tort)*(1-reduced_check)))<=output_table[4*i+2] && ((int)(((double)tort)*(1+reduced_check)))>=output_table[4*i+2])
+							{
+								output_reducing[i]/=2;
+								number[i]=0;
+								output_lattice(index,rog,tort,dx,dy,dz,fakeDP,fakeDPS,1);
+							}
+						}
+						
+						
+
+						output_table[4*i+3]++;
 					}
 				}
 			}
@@ -386,6 +553,7 @@ void output_lattice(int index,double rog,double tort,int dx[numbercores*pertrusi
 			{
 				output_table[4*i+3]++;
 			}
+			
 		}
 		i++;
 	}
@@ -1342,19 +1510,32 @@ void sysparam(int index)
         }
 
 
-	//int fakeDPS[L1dim_S_z] = {0};
+  double fakeDP[L1dim_S_z] = {0};
+        for (int i = (0); i < numbercores*pertrusionpercore*lengthpercore; i++) // performs the rotations
+        {
+            density_profile[index*L1dim_S_z+(poly_lattice_coordinates[3*i+2])]++;
+            fakeDP[(poly_lattice_coordinates[3*i+2])]++;
+        }
+
+
+
+	double fakeDPS[L1dim_S_z] = {0};
         int s_array[3]={0};
         for (int i = (0); i < no_solvent_sites; i++) // performs the rotations
         {
             general_coord(s_array,solvent_loc[i]);
             density_profile_solvent[index*L1dim_S_z+(s_array[2])]++;
-      //      fakeDPS[(s_array[2])]++;
+            fakeDPS[(s_array[2])]++;
         }
 
+for (int i = (0); i < L1dim_S_z; i++) // performs the rotations
+        {
+            fakeDP[i]=fakeDP[i]/(L1dim_S_xy*L1dim_S_xy);
+            fakeDPS[i]=fakeDPS[i]/(L1dim_S_xy*L1dim_S_xy);
+        }
 	
-// output_lattice(index,(radius/(numbercores*pertrusionpercore))*(radius/(numbercores*pertrusionpercore))/lengthpercore,tort/(numbercores*pertrusionpercore));
-
-
+	if(output_choice) output_lattice(index,(radius/(numbercores*pertrusionpercore))*(radius/(numbercores*pertrusionpercore))/lengthpercore,tort/(numbercores*pertrusionpercore),dx,dy,dz,fakeDP,fakeDPS,0);
+	
 //
 //    int summed_diff[3] = {0,0,0};
 //        int arm = 0;
