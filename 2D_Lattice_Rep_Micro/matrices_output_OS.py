@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 import os
+import sys
 from matplotlib.colors import ListedColormap
 from collections import Counter
 import numpy as np
@@ -25,7 +26,6 @@ from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 
 viridis = cm.get_cmap('viridis', 10)
 newcolors = viridis(np.linspace(0, 1, 10))
-pink = np.array([170/256, 170/256, 170/256, 1])
 
 #pink = np.array([1, 1, 1, 1])
 #pink = np.array([170/256, 170/256, 170/256, 1])
@@ -58,9 +58,17 @@ def colored(matrix):
         if s != 0:
             new_matrix[matrix == s] = i
     return new_matrix
-    
-plt.rcParams['font.size'] = '15'
-path = os.getcwd()
+
+
+
+import platform
+is_windows = any(platform.win32_ver());
+if is_windows:
+    delim="\\"
+else:
+    delim="/"
+
+path = os.getcwd() +delim;
 files = os.listdir(path) #Save the data in the folder Data
 # matrices = []
 for file in files:
@@ -74,7 +82,7 @@ for file in files:
         ccmap=ListedColormap(newcolors)
         cs = ax.matshow(colored_matrix, cmap=ccmap) # See above to produce other styles
         fig.colorbar(cs)
-        fig.savefig("C:\\Users\\yello\\Downloads\\Final Additions\\OR\\New folder (2)\\"+ file.replace(".", "_") + ".png")
+        fig.savefig(os.getcwd() +delim+"img"+file.replace(".", "_") + ".png")
         plt.close(fig)
     else:
         yy=0
