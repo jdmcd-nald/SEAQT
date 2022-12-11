@@ -158,6 +158,7 @@ double flatratio;
 double flatmin;
 
 int en_choice;
+int sysparam_choice;
 int output_choice;
 int en_array[4][4][4]; // plan to hold the available energy values of the hamiltonian will contain 1's for available energies and 0 for others, made to be a size of three so all values can be looked up other wise Id have to reduce by 1
 int en_array_pp[4][4][4]; // plan to hold the available energy values of the hamiltonian will contain 1's for available energies and 0 for others, made to be a size of three so all values can be looked up other wise Id have to reduce by 1
@@ -209,7 +210,7 @@ double* endtoend_buf = (double*)malloc(hist_size * sizeof(double));
 int MoveProposal = 0; // tracks if a move has been performed
 //checks to calculate local energy
 int poly_solvent_mov = 0; // says wether a chosen mov moved solvent or a monomer
-int chosen_mov = 0; // tellw which move was last chosen
+int chosen_mov = 0; // tells which move was last chosen
 int poly_mov_start = 0; // tells which monomwrs were involved with a given move the starting position (on thr chain)
 int poly_mov_end = 0; // tells which monomer is the end considered loop
 
@@ -1871,7 +1872,8 @@ int main(int argc, char* argv[])
 
     int restart_check = atoi(argv[5]);
 	en_choice= atoi(argv[6]);
-	output_choice= atoi(argv[7]);
+	sysparam_choice= atoi(argv[7]);
+	output_choice= atoi(argv[8]);
 
     int swap_every = atoi(argv[3]);      // after this number of sweeps try conformations swap
     int swap_every_init = swap_every;
@@ -2393,7 +2395,7 @@ int main(int argc, char* argv[])
                     else {
                         eold = energie; // accept
                        
-                       //sysparam(energie-energie%10);
+                       if(sysparam_choice) sysparam(energie-energie%10);
 //                        stdoutlog = fopen(stdoutlogname, "a");
 //                        fprintf(stdoutlog, "30000");
 //                                fclose(stdoutlog);
