@@ -158,6 +158,7 @@ double flatratio;
 double flatmin;
 
 int en_choice;
+int output_choice;
 int en_array[4][4][4]; // plan to hold the available energy values of the hamiltonian will contain 1's for available energies and 0 for others, made to be a size of three so all values can be looked up other wise Id have to reduce by 1
 int en_array_pp[4][4][4]; // plan to hold the available energy values of the hamiltonian will contain 1's for available energies and 0 for others, made to be a size of three so all values can be looked up other wise Id have to reduce by 1
 int en_array_ps[4][4][4]; // plan to hold the available energy values of the hamiltonian will contain 1's for available energies and 0 for others, made to be a size of three so all values can be looked up other wise Id have to reduce by 1
@@ -288,6 +289,8 @@ double* dps_compare;
 int table_length=0;
 void init_output();
 void output_lattice(int index,double rog,double tort,int dx[numbercores*pertrusionpercore*lengthpercore],int dy[numbercores*pertrusionpercore*lengthpercore],int dz[numbercores*pertrusionpercore*lengthpercore],double fakeDP[L1dim_S_z],double fakeDPS[L1dim_S_z],int yy);
+
+
 
 void init_output()
 {
@@ -1868,6 +1871,7 @@ int main(int argc, char* argv[])
 
     int restart_check = atoi(argv[5]);
 	en_choice= atoi(argv[6]);
+	output_choice= atoi(argv[7]);
 
     int swap_every = atoi(argv[3]);      // after this number of sweeps try conformations swap
     int swap_every_init = swap_every;
@@ -1892,6 +1896,7 @@ int main(int argc, char* argv[])
     }
 
     init_hists(); // moved above init_lattice() for calculation considerations
+	if(output_choice) init_output();
     init_neighbors();
     init_lattice(Emin, Emax); // 0 - random; 1 - all equal
 
