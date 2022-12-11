@@ -946,7 +946,7 @@ int find_local_energy_range(double Eglobmin, double Eglobmax, double overlap, in
         //Eminindex = floor(Emin + -Eglobalmin);
         //Emaxindex = ceil(Emax + -Eglobalmin);
 
-    if (fopen("Ewindows_99.dat", "r") == NULL)
+    if (fopen("Ewindows.dat", "r") == NULL)
     {
         fprintf(stdoutlog, "\nProc %i: Can't find file Ewindows.dat. Will calculate equal-size windows with overlap %lf\n", myid, overlap);
         double Ewidth = (Eglobmax - Eglobmin) / (1.0 + ((double)(N / multiple) - 1.0) * (1.0 - overlap));
@@ -969,7 +969,7 @@ int find_local_energy_range(double Eglobmin, double Eglobmax, double overlap, in
         int valueee;
         int valueeee;
         
-        fptr = fopen("Ewindows_99.dat", "r");
+        fptr = fopen("Ewindows.dat", "r");
 
         while (fscanf(fptr, "%i,%i,%i,%i\n", &value, &valuee, &valueee, &valueeee) > 0)
         {
