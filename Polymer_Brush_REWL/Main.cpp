@@ -157,6 +157,7 @@ int ret_status;
 double flatratio;
 double flatmin;
 
+int en_choice;
 int en_array[4][4][4]; // plan to hold the available energy values of the hamiltonian will contain 1's for available energies and 0 for others, made to be a size of three so all values can be looked up other wise Id have to reduce by 1
 int en_array_pp[4][4][4]; // plan to hold the available energy values of the hamiltonian will contain 1's for available energies and 0 for others, made to be a size of three so all values can be looked up other wise Id have to reduce by 1
 int en_array_ps[4][4][4]; // plan to hold the available energy values of the hamiltonian will contain 1's for available energies and 0 for others, made to be a size of three so all values can be looked up other wise Id have to reduce by 1
