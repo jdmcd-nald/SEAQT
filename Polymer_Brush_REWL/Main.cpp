@@ -1685,7 +1685,8 @@ int main(int argc, char* argv[])
     //rseed = 1650860932;
     srand(rseed + myid);
 
-	int restart_check = atoi(argv[5]);
+    int restart_check = atoi(argv[5]);
+	en_choice= atoi(argv[6]);
 
     int swap_every = atoi(argv[3]);      // after this number of sweeps try conformations swap
     int swap_every_init = swap_every;
