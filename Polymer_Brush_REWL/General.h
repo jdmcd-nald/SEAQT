@@ -2,7 +2,7 @@
 #define GENERAL_12_9_22_H
 #include "Constants.h"
 
-void init_poly_cores(); // init the polymer coordinates
+void init_poly_cores(int); // init the polymer coordinates
 void init_en_and_dist_array(); // initialize the energy and the distance array
 void poly_coord_decompose(int, int); // decomompes a given polymer index into cartesian coordinates
 double point_distance(int, int); //gives the distance between two points
