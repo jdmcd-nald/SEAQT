@@ -1,3 +1,4 @@
+
 // mpirun -np 7 EXE .796 1 9699 97679 1 0 1 1
 
 // Fully adapted to periodic boundary condtions utilized Dr. Bai's lecture notes
@@ -10,56 +11,58 @@
   (c) Thomas Vogel and Ying Wai Li (2013-2019)
 
   License: Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
-           https://creativecommons.org/licenses/by-sa/4.0/legalcode
+		   https://creativecommons.org/licenses/by-sa/4.0/legalcode
 
-       You are free to:
+	   You are free to:
+
 
        - Share, copy and redistribute the material in any medium or format
        - Adapt, transform, and build upon the material for any purpose, even
   commercially
 
-       (The licensor cannot revoke these freedoms as long as you
-       follow the following license terms.)
+	   (The licensor cannot revoke these freedoms as long as you
+	   follow the following license terms.)
 
-       Under the following terms:
+	   Under the following terms:
 
-       1) Attribution: You must give appropriate credit and must
-       not remove this preface from any file containing parts of
-       this code. You may give credit in any reasonable manner,
-       but not in any way that suggests the licensor endorses you
-       or your use.
+	   1) Attribution: You must give appropriate credit and must
+	   not remove this preface from any file containing parts of
+	   this code. You may give credit in any reasonable manner,
+	   but not in any way that suggests the licensor endorses you
+	   or your use.
 
-       If you publish data that was created using this code, or
-       parts of it, we ask to cite the original papers:
-         - T. Vogel et al., Phys. Rev. Lett. 110 (2013) 210603
-             - T. Vogel et al., Phys. Rev. E 90 (2014) 023302
-       Accompanying publications include:
-         - T. Vogel et al., J. Phys.: Conf. Ser. 487 (2014) 012001
-             - Y.W. Li et al., J. Phys.: Conf. Ser. 510 (2014) 012012
+	   If you publish data that was created using this code, or
+	   parts of it, we ask to cite the original papers:
+		 - T. Vogel et al., Phys. Rev. Lett. 110 (2013) 210603
+			 - T. Vogel et al., Phys. Rev. E 90 (2014) 023302
+	   Accompanying publications include:
+		 - T. Vogel et al., J. Phys.: Conf. Ser. 487 (2014) 012001
+			 - Y.W. Li et al., J. Phys.: Conf. Ser. 510 (2014) 012012
 
-       2) ShareAlike: If you modify, transform, or build upon the
-       material, you must distribute your contributions under the
-       same license as the original.
+	   2) ShareAlike: If you modify, transform, or build upon the
+	   material, you must distribute your contributions under the
+	   same license as the original.
 
-       3) No additional restrictions: You may not apply legal terms
-       or technological measures that legally restrict others from
-       doing anything the license permits.
+	   3) No additional restrictions: You may not apply legal terms
+	   or technological measures that legally restrict others from
+	   doing anything the license permits.
 
-       Notices:
+	   Notices:
 
-       You do not have to comply with the license for elements of
-       the material in the public domain or where your use is
-       permitted by an applicable exception or limitation.  No
-       warranties are given. The license may not give you all of
-       the permissions necessary for your intended use. For
-       example, other rights such as publicity, privacy, or moral
-       rights may limit how you use the material.
+	   You do not have to comply with the license for elements of
+	   the material in the public domain or where your use is
+	   permitted by an applicable exception or limitation.  No
+	   warranties are given. The license may not give you all of
+	   the permissions necessary for your intended use. For
+	   example, other rights such as publicity, privacy, or moral
+	   rights may limit how you use the material.
 
  */
 
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #endif
+
 
 #include <float.h>
 #include <limits.h>
@@ -146,6 +149,7 @@ double Emin,
     Emax;  // doubles as calculation of boundaries in Energy is not in 'int'
 int Eminindex, Emaxindex, Estartindex;  // local boundaries as index
 
+
 // MPI; set up with local communicators for replica exchange (RE)
 // Needed so that two processes can talk w/o depending on / bothering the others
 int numprocs, myid, multiple, comm_id;
@@ -160,6 +164,7 @@ MPI_Status status;
 int merge_hists =
     1;  // flag whether or not to merge histograms between iterations for
         // multiple walkers on the same energy range
+
 
 // to keep track of exchange statistics
 int tryleft, tryright, exchangeleft, exchangeright;
@@ -3360,9 +3365,28 @@ int main(int argc, char* argv[]) {
                 }
             }
 
-            // decrease modification factor
-            // canonical method (reduce by sqrt(2)) implemented
-            lnf /= 2.0;
+
+
+	//    stdoutlog = fopen(stdoutlogname, "a");
+	//    fprintf(stdoutlog, "\n");
+	//    fprintf(stdoutlog, ".6 poly_en():%i",poly_en());
+	//    fprintf(stdoutlog, "\n");
+	//    fclose(stdoutlog);
+
+	//    stdoutlog = fopen(stdoutlogname, "a");
+	//    fprintf(stdoutlog, "\n");
+	//    fprintf(stdoutlog, "5 sax:%f  say:%f  saz:%f",s_avg[0],s_avg[1],s_avg[2]);
+	//    fprintf(stdoutlog, "\n");
+	//    fclose(stdoutlog);
+
+	s_avg[0] /= ((double)(chain_length - 2));
+	s_avg[1] /= ((double)(chain_length - 2));
+	s_avg[2] /= ((double)(chain_length - 2));
+	double ssum = 0.0;
+	for (int y = (0); y < chain_length - 2; y++)	// performs the rotations
+	{
+		ssum += (((double)(s_vector[3 *y])) - s_avg[0]) *(((double)(s_vector[3 *y])) - s_avg[0]) + (((double)(s_vector[3 *y + 1])) - s_avg[1]) *(((double)(s_vector[3 *y + 1])) - s_avg[1]) + (((double)(s_vector[3 *y + 2])) - s_avg[2]) *(((double)(s_vector[3 *y + 2])) - s_avg[2]);
+	}
 
             for (int i = 0; i < hist_size; i++) HE[i] = 0;  // reset H(E)
             iteration++;                                    // iteration counter
@@ -3502,3 +3526,4 @@ int main(int argc, char* argv[]) {
 
     return (0);  // you did it!
 }
+

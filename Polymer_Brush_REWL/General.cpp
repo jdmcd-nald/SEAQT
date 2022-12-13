@@ -165,9 +165,10 @@ void init_poly_cores(int en_choice)
         }
     }
         
-  
+
     
     
+
     
     if (fopen("Maximum_Config_Poly.txt","r") == NULL)
     {
@@ -201,6 +202,8 @@ void init_poly_cores(int en_choice)
         fprintf(stdoutlog, "\nProc %i: Can't find file Maximum_Config_Solvent.txt \n", myid);
         fclose(stdoutlog);
         mix_counter++;
+
+
     }
     
     
@@ -644,6 +647,7 @@ double poly_point_distance(int* poly_lattice_coordinates,int polymer_position_1,
     return dist_array[0][0][0];
 }
 
+
 void init_en_and_dist_array_FH_minus();
 void init_en_and_dist_array_FH_plus();
 void init_en_and_dist_array_cyclo();
@@ -666,6 +670,7 @@ void init_en_and_dist_array(int en_choice)
 
 void init_en_and_dist_array_FH_minus()
 {
+
      stdoutlog = fopen(stdoutlogname, "a");
     fprintf(stdoutlog, "Made it to en array and distance()\n");
     fclose(stdoutlog);
@@ -879,7 +884,7 @@ void init_en_and_dist_array_FH_minus()
 
 void init_en_and_dist_array_FH_plus()
 {
-       
+
 stdoutlog = fopen(stdoutlogname, "a");
     fprintf(stdoutlog, "Made it to en array and distance()\n");
     fclose(stdoutlog);
