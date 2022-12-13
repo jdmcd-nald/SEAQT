@@ -6,4 +6,4 @@ Wholly seperate implementation from polymer folding code
 
 Example Initialization Parameters:
 
-mpirun -np 3 EXE .53 1 8000 6234 0 0 0 1
+mpirun -np 3 EXE .53 1 8000 6234 0 0 1 0
