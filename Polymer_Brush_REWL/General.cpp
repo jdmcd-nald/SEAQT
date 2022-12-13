@@ -138,8 +138,7 @@ void init_poly_cores(int en_choice)
         }
     }
     
-    if(myid<minmaxid)
-    {
+    
     if (fopen("Minimum_Config_Poly.txt","r") == NULL)
     {
         stdoutlog = fopen(stdoutlogname, "a");
@@ -148,6 +147,8 @@ void init_poly_cores(int en_choice)
         mix_counter++;
     }
     else // rewrite of prior file reading system to be more portable
+    {
+    if(myid<minmaxid)
     {
         FILE* fptr;
         int value;
@@ -161,20 +162,14 @@ void init_poly_cores(int en_choice)
         }
 
         fclose(fptr);
+        }
     }
         
-        if (fopen("Minimum_Config_Solvent.txt","r") == NULL)
-    {
-        stdoutlog = fopen(stdoutlogname, "a");
-        fprintf(stdoutlog, "\nProc %i: Can't find file Minimum_Config_Solvent.txt \n", myid);
-        fclose(stdoutlog);
-        mix_counter++;
-    }
-        
-    }
+
     
-    if(myid>=minmaxid)
-    {
+    
+
+    
     if (fopen("Maximum_Config_Poly.txt","r") == NULL)
     {
         stdoutlog = fopen(stdoutlogname, "a");
@@ -183,6 +178,8 @@ void init_poly_cores(int en_choice)
         mix_counter++;
     }
     else // rewrite of prior file reading system to be more portable
+    {
+    if(myid>=minmaxid)
     {
         FILE* fptr;
         int value;
@@ -196,6 +193,7 @@ void init_poly_cores(int en_choice)
         }
 
         fclose(fptr);
+        }
     }
         
           if (fopen("Maximum_Config_Solvent.txt","r") == NULL)
@@ -204,8 +202,10 @@ void init_poly_cores(int en_choice)
         fprintf(stdoutlog, "\nProc %i: Can't find file Maximum_Config_Solvent.txt \n", myid);
         fclose(stdoutlog);
         mix_counter++;
+
+
     }
-    }
+    
     
     // writes the chain occupation to lattice point
     int poly_index = -1;
@@ -220,6 +220,7 @@ void init_poly_cores(int en_choice)
     }
 
  optomize();
+
 
     if(mix_counter==4)
     {
@@ -647,25 +648,29 @@ double poly_point_distance(int* poly_lattice_coordinates,int polymer_position_1,
 }
 
 
+void init_en_and_dist_array_FH_minus();
+void init_en_and_dist_array_FH_plus();
+void init_en_and_dist_array_cyclo();
 void init_en_and_dist_array(int en_choice)
 {
-    swtich(en_choice) {
+    switch(en_choice) {
         case 0:
-            init_en_and_dist_array_cyclo()
+            init_en_and_dist_array_cyclo();
         break;
         case 1:
-            init_en_and_dist_array_FH_minus()
+            init_en_and_dist_array_FH_minus();
         break;
         case 2:
-            init_en_and_dist_array_FH_plus()
+            init_en_and_dist_array_FH_plus();
         break;
         default:
-            init_en_and_dist_array_cyclo()
+            init_en_and_dist_array_cyclo();
     }
 }
 
 void init_en_and_dist_array_FH_minus()
 {
+
      stdoutlog = fopen(stdoutlogname, "a");
     fprintf(stdoutlog, "Made it to en array and distance()\n");
     fclose(stdoutlog);
@@ -879,167 +884,7 @@ void init_en_and_dist_array_FH_minus()
 
 void init_en_and_dist_array_FH_plus()
 {
-    stdoutlog = fopen(stdoutlogname, "a");
-    fprintf(stdoutlog, "Made it to en array and distance()\n");
-    fclose(stdoutlog);
-    
-    for (int i = 0; i < 11; i++)
-    {
-    int_en_array_pp[i]=0;
-        int_en_array_ps[i]=0;
-        int_en_array_ss[i]=0;
-        int_en_array[i]=0;
-        int_en_array_bond[i]=0;
-    }
-    
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            for (int k = 0; k < 4; k++)
-            {
-            
-                en_array_pp[i][j][k] =0;
-                en_array_ps[i][j][k] =0;
-                en_array_ss[i][j][k] =0;
-                en_array[i][j][k] =0;
-                en_array_bond[i][j][k] =0;
-                en_array_wall[i][j][k] =0;
-                
-                if (i * i + j * j + k * k == 4)
-                {
-                    en_array[i][j][k] =(int) 303.974;
-                    en_array_bond[i][j][k] =(int) 1.5*2028.01;
-                    en_array_wall[i][j][k] =(int) -95.7;
-                    
-                    en_array[i][j][k] =(int) -10;
-                    en_array_bond[i][j][k] =1.5*235.;
-                    en_array_wall[i][j][k] =(int) -9;
-                    
-                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
-                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
-                    
-                                              en_array_pp[i][j][k] =-10;
-                                             en_array_ps[i][j][k] =-13;
-                                             en_array_ss[i][j][k] =-9;
-                                             
-                                                 int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
-                                              int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
-                                             int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
-                    
-                   // en_array[i][j][k] =(int) 300;
-                    //en_array_bond[i][j][k] =(int) 2000;
-                    //en_array_wall[i][j][k] =(int) -100;
-                }
-                if (i * i + j * j + k * k == 5)
-                {
-                    en_array[i][j][k] = (int)16.3753;
-                    en_array_bond[i][j][k] =(int) 2355.75;
-                    en_array_wall[i][j][k] =(int) -75.9574;
-                    
-                    en_array[i][j][k] = (int)-8;
-                    en_array_bond[i][j][k] = 1.5*315.;
-                    en_array_wall[i][j][k] =(int) -8;
-                    
-                    
-                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
-                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
-                    
-                                         en_array_pp[i][j][k] =-8;
-                                              en_array_ps[i][j][k] =-10;
-                                              en_array_ss[i][j][k] =-7;
-                                              
-                                                  int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
-                                               int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
-                                              int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
-                    
-                    //en_array[i][j][k] = (int) 20;
-                    //en_array_bond[i][j][k] =(int) 2400;
-                    //en_array_wall[i][j][k] =(int) -100;
-                }
-                if (i * i + j * j + k * k == 6)
-                {
-                    en_array[i][j][k] = (int) 3.50123;
-                    en_array_bond[i][j][k] =(int) 3095.98;
-                    en_array_wall[i][j][k] =(int) -60.2979;
-                    
-                    en_array[i][j][k] = (int) -5;
-                    en_array_bond[i][j][k] = 1.5*410.;
-                    en_array_wall[i][j][k] =(int) -6;
-                    
-                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
-                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
-                    
-                                 en_array_pp[i][j][k] =-5;
-                               en_array_ps[i][j][k] =-6;
-                               en_array_ss[i][j][k] =-5;
-                               
-                                   int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
-                                int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
-                               int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
-                    
-                    //en_array[i][j][k] = (int)10;
-                    //en_array_bond[i][j][k] =(int) 3100;
-                    //en_array_wall[i][j][k] =(int) -10;
-                }
-                if (i * i + j * j + k * k == 8)
-                {
-                    en_array[i][j][k] = (int) 43.1734;
-                    en_array_bond[i][j][k] = (int)5475.03;
-                    en_array_wall[i][j][k] =(int) - 40.462;
-                    
-                    en_array[i][j][k] = (int) -3;
-                    en_array_bond[i][j][k] =  1.5*676.;
-                    en_array_wall[i][j][k] =(int) -4;
-                    
-                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
-                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
-                    
-                          en_array_pp[i][j][k] =-2;
-                                     en_array_ps[i][j][k] =-3;
-                                     en_array_ss[i][j][k] =-2;
-                                     
-                                         int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
-                                      int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
-                                     int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
-                    
-                    //en_array[i][j][k] = (int) 50;
-                    //en_array_bond[i][j][k] = (int)5500;
-                    //en_array_wall[i][j][k] =(int) - 50;
-                }
-                if (i * i + j * j + k * k == 9)
-                {
-                    en_array[i][j][k] = (int) 57.6302;
-                    en_array_bond[i][j][k] =(int) 7828.85;
-                    en_array_wall[i][j][k] =(int) - 34.1454;
-                    
-                    en_array[i][j][k] = (int)-2;
-                    en_array_bond[i][j][k] = 1.5*887.;
-                    en_array_wall[i][j][k] =(int) -3;
-                    
-                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
-                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
-                    
-                        en_array_pp[i][j][k] =-2;
-                                     en_array_ps[i][j][k] =-2;
-                                     en_array_ss[i][j][k] =-2;
-                                     
-                                         int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
-                                      int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
-                                     int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
-                    
-                    //en_array[i][j][k] = (int)50;
-                    //en_array_bond[i][j][k] =(int) 7800;
-                    //en_array_wall[i][j][k] =(int) - 50;
-                }
 
-            
-            if (i * i + j * j + k * k == 10)
-                {
-                    en_array[i][j][k] = (int) 57.6302;
-                    en_array_bond[i][j][k] =(int) 7828.85;
-                    en_array_wall[i][j][k] =(int) - 34.1454;
-                    
 stdoutlog = fopen(stdoutlogname, "a");
     fprintf(stdoutlog, "Made it to en array and distance()\n");
     fclose(stdoutlog);

@@ -52,8 +52,8 @@ extern int* lattice_polymer;
 extern int* poly_lattice_coordinates;
 extern int* poly_lattice_connection;
 
-const int Eglobalmin = -250000;          // minimum energy for 2D square lattice Potts model
-const int Eglobalmax = 650000;// -188/2;                       // maximum energy of Potts model
+const int Eglobalmin = -200000;          // minimum energy for 2D square lattice Potts model
+const int Eglobalmax = 500000;// -188/2;                       // maximum energy of Potts model
 const int Eglobalwidth = -(Eglobalmin - Eglobalmax);
 const int bctype = 0;                           // type of boundary condition: 0 - periodic; 1 - Braskamp Kunz
 extern int q;                               // number of different possible spin states (q-state Potts model)
