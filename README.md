@@ -1,7 +1,7 @@
 # SEAQT
 SEAQT and REWL Sample Codes 
 
-Various from Jared McDonald PhD SEAQT research work, uploaded for posterity and distributed under the below license just give credit to published papers if work is used
+Various program files from Jared McDonald PhD SEAQT research work, uploaded for posterity and distributed under the below license just give credit to published papers if work is used
 
   License: Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
 		   https://creativecommons.org/licenses/by-sa/4.0/legalcode
