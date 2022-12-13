@@ -842,7 +842,7 @@ void pseudowl() // A Fake WL Function used to explore the energy landscape befor
     int wiggletwo;
 
     // terminal modification factor
-    double check_flatness_every = 1000000;   // in number of sweeps changed to a large number to encourage visitation of all levels (reduces time in the long run)
+    double check_flatness_every = 1000;   // in number of sweeps changed to a large number to encourage visitation of all levels (reduces time in the long run)
     //double check_flatness_every = 10;   // in number of sweeps changed to a large number to encourage visitation of all levels (reduces time in the long run)
     int backup;
     int backuptwo;

@@ -98,8 +98,10 @@ int anint(float c)
     return 0;
 }
 
-void init_poly_cores()
+void init_poly_cores(int en_choice)
 {
+    int mix_counter=0;
+    
     stdoutlog = fopen(stdoutlogname, "a");
     fprintf(stdoutlog, "Made it to init poly_core()\n");
     fclose(stdoutlog);
@@ -136,15 +138,17 @@ void init_poly_cores()
         }
     }
     
-    if(myid<minmaxid)
-    {
+    
     if (fopen("Minimum_Config_Poly.txt","r") == NULL)
     {
         stdoutlog = fopen(stdoutlogname, "a");
-        fprintf(stdoutlog, "\nProc %i: Can't find file Access.txt \n", myid);
+        fprintf(stdoutlog, "\nProc %i: Can't find file Minimum_Config_Poly.txt \n", myid);
         fclose(stdoutlog);
+        mix_counter++;
     }
     else // rewrite of prior file reading system to be more portable
+    {
+    if(myid<minmaxid)
     {
         FILE* fptr;
         int value;
@@ -158,18 +162,23 @@ void init_poly_cores()
         }
 
         fclose(fptr);
+        }
     }
-    }
+        
+  
     
-    if(myid>=minmaxid)
-    {
+    
+    
     if (fopen("Maximum_Config_Poly.txt","r") == NULL)
     {
         stdoutlog = fopen(stdoutlogname, "a");
-        fprintf(stdoutlog, "\nProc %i: Can't find file Access.txt \n", myid);
+        fprintf(stdoutlog, "\nProc %i: Can't find file Maximum_Config_Poly.txt \n", myid);
         fclose(stdoutlog);
+        mix_counter++;
     }
     else // rewrite of prior file reading system to be more portable
+    {
+    if(myid>=minmaxid)
     {
         FILE* fptr;
         int value;
@@ -183,8 +192,17 @@ void init_poly_cores()
         }
 
         fclose(fptr);
+        }
     }
+        
+          if (fopen("Maximum_Config_Solvent.txt","r") == NULL)
+    {
+        stdoutlog = fopen(stdoutlogname, "a");
+        fprintf(stdoutlog, "\nProc %i: Can't find file Maximum_Config_Solvent.txt \n", myid);
+        fclose(stdoutlog);
+        mix_counter++;
     }
+    
     
     // writes the chain occupation to lattice point
     int poly_index = -1;
@@ -200,181 +218,166 @@ void init_poly_cores()
 
  optomize();
 
-//    int new_index;
-//    for(int i=0;i<numbercores*pertrusionpercore;i++)
-//    {
-//        poly_latticepoint_clear(poly_lattice_indexes, i*lengthpercore*pertrusionpercore, (1+i)*lengthpercore*pertrusionpercore); // clears all of the lattice points between the two axis points
-//        stdoutlog = fopen(stdoutlogname, "a");
-//        fprintf(stdoutlog, "base %i\n",poly_lattice_indexes[i*pertrusionpercore*lengthpercore]);
-//        fclose(stdoutlog);
-//        for(int j=1;j<lengthpercore;j++)
-//        {
-//            int counter = 0;
-//            int diff1= 46-73+1;
-//            int randstart = rand()%(diff1);
-//            int assignable=0;
-//            while(counter<diff1 && assignable!=1)
-//            {
-//                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff1+74];
 
-//                if(new_index<(L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
-//                {
-//                    assignable = latticepoint_assign2(new_index,1);
-//                }
-//                if(assignable)
-//                {
-//                    stdoutlog = fopen(stdoutlogname, "a");
-//                    fprintf(stdoutlog, "assigned 1 %i  %i\n",new_index,assignable);
-//                    fclose(stdoutlog);
-//                }
-
-//                counter++;
-//            }
-
-//            int diff2= 74-93+1;
-//            counter = 0;
-//            randstart = rand()%(diff2);
-//            while(counter<diff2 && assignable!=1)
-//            {
-//                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff2+74];
-
-//                if(new_index>(L1dim_S_xy*L1dim_S_xy*10))
-//                {
-//                    if(new_index<(L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
-//                    {
-//                           assignable = latticepoint_assign2(new_index,1);
-//                    }
-//                }
-//                else
-//                {
-//                    assignable = 0;
-//                }
-
-//                if(assignable)
-//                {
-//                    stdoutlog = fopen(stdoutlogname, "a");
-//                    fprintf(stdoutlog, "assigned 2 %i %i\n",new_index,assignable);
-//                    fclose(stdoutlog);
-//                }
-//                counter++;
-//            }
-
-//            int diff3= 94-119+1;
-//            randstart = rand()%(diff3);
-//            while(counter<diff3 && assignable!=1)
-//            {
-//                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff3+94];
-//                if(new_index>
-//                (L1dim_S_xy*L1dim_S_xy*10))
-//                {
-//                    if(new_index<
-//                    (L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
-//                    {
-//                    assignable = latticepoint_assign2(new_index,1);
-//                     }
-//                }
-//                else{
-//                    assignable = 0;
-//                }
-
-//                if(assignable) {
-//                    stdoutlog = fopen(stdoutlogname, "a");
-//                        fprintf(stdoutlog, "assigned 3 %i  %i\n",new_index,assignable);
-//                    fclose(stdoutlog);
-//                }
-//                counter++;
-//            }
-
-//            int diff4= 0-45+1;
-//            counter = 0;
-//            randstart = rand()%(diff4);
-//            while(counter<diff4 && assignable!=1)
-//            {
-//                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff4+0];
-//                assignable = latticepoint_assign2(new_index,1);
-//                if(assignable) {
-//                    stdoutlog = fopen(stdoutlogname, "a");
-//                    fprintf(stdoutlog, "assigned 4 %i  %i\n",new_index,assignable);
-//                    fclose(stdoutlog);
-//                }
-//                counter++;
-//            }
-
-//            if(assignable)
-//            {
-//                latticepoint_assign(new_index,1);
-//                poly_lattice_indexes[(i*lengthpercore)+j]=new_index;
-//                stdoutlog = fopen(stdoutlogname, "a");
-//                fprintf(stdoutlog, "guess assign %i,%i,%i\n",i,j,new_index);
-//                fclose(stdoutlog);
-//            }
-//            else{
-
-
-//                stdoutlog = fopen(stdoutlogname, "a");
-//                fprintf(stdoutlog, "couldnt assign %i,%i,%i\n",i,j,new_index);
-//                fclose(stdoutlog);
-
-//                while(assignable==0)
-//                {
-//                    stdoutlog = fopen(stdoutlogname, "a");
-//                    fprintf(stdoutlog, "trying again %i  %i\n",i,j);
-//                    fclose(stdoutlog);
-
-//                    poly_latticepoint_clear(poly_lattice_indexes, i*lengthpercore*pertrusionpercore, (1+i)*lengthpercore*pertrusionpercore); // clears all of the lattice points between the two axis points
-//                    stdoutlog = fopen(stdoutlogname, "a");
-//                    fprintf(stdoutlog, "ta base %i\n",poly_lattice_indexes[i*pertrusionpercore*lengthpercore]);
-//                    fclose(stdoutlog);
-//                    for(int k=1;k<=j;k++)
-//                    {
-//                        int counter = 0;
-//                        int randstart = rand()%(120);
-//                        assignable=0;
-//                        while(counter<120 && assignable!=1)
-//                        {
-//                            new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+k-1]*120+(randstart+counter)%120+0];
-//                            if(new_index< (L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
-//                            {
-//                                if(new_index>L1dim_S_xy*L1dim_S_xy*6)
-//                                {
-//                                    assignable = latticepoint_assign2(new_index,1);
-//                                }
-//                            }
-//                            if(assignable) {
-//                                stdoutlog = fopen(stdoutlogname, "a");
-//                                fprintf(stdoutlog, "assigned ta %i  %i\n",new_index,assignable);
-//                                fclose(stdoutlog);
-//                            }
-//                            counter++;
-//                        }
-
-//                        if(assignable)
-//                        {
-//                            latticepoint_assign(new_index,1);
-//                            poly_lattice_indexes[(i*lengthpercore)+k]=new_index;
-
-//                            stdoutlog = fopen(stdoutlogname, "a");
-//                            fprintf(stdoutlog, "TA guess assign %i,%i,%i\n",i,k,new_index);
-//                            fclose(stdoutlog);
-//                        }
-//                        else{
-//                         stdoutlog = fopen(stdoutlogname, "a");
-//                            fprintf(stdoutlog, "restart ...\n");
-//                            fclose(stdoutlog);
-
-//                            break;
-//                        }
-//                    }
-//                }
+    if(mix_counter==4)
+    {
+    int new_index;
+    for(int i=0;i<numbercores*pertrusionpercore;i++)
+    {
+        poly_latticepoint_clear(poly_lattice_indexes, i*lengthpercore*pertrusionpercore, (1+i)*lengthpercore*pertrusionpercore); // clears all of the lattice points between the two axis points
+        stdoutlog = fopen(stdoutlogname, "a");
+        fprintf(stdoutlog, "base %i\n",poly_lattice_indexes[i*pertrusionpercore*lengthpercore]);
+        fclose(stdoutlog);
+        for(int j=1;j<lengthpercore;j++)
+        {
+            int counter = 0;
+            int diff1= 46-73+1;
+            int randstart = rand()%(diff1);
+            int assignable=0;
+            while(counter<diff1 && assignable!=1)
+            {
+                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff1+74];
+                if(new_index<(L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
+                {
+                    assignable = latticepoint_assign2(new_index,1);
+                }
+                if(assignable)
+                {
+                    stdoutlog = fopen(stdoutlogname, "a");
+                    fprintf(stdoutlog, "assigned 1 %i  %i\n",new_index,assignable);
+                    fclose(stdoutlog);
+                }
+                counter++;
+            }
+            int diff2= 74-93+1;
+            counter = 0;
+            randstart = rand()%(diff2);
+            while(counter<diff2 && assignable!=1)
+            {
+                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff2+74];
+                if(new_index>(L1dim_S_xy*L1dim_S_xy*10))
+                {
+                    if(new_index<(L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
+                    {
+                           assignable = latticepoint_assign2(new_index,1);
+                    }
+                }
+               else
+                {
+                    assignable = 0;
+                }
+                if(assignable)
+                {
+                    stdoutlog = fopen(stdoutlogname, "a");
+                    fprintf(stdoutlog, "assigned 2 %i %i\n",new_index,assignable);
+                    fclose(stdoutlog);
+                }
+                counter++;
+            }
+            int diff3= 94-119+1;
+            randstart = rand()%(diff3);
+            while(counter<diff3 && assignable!=1)
+            {
+                new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff3+94];
+                if(new_index>
+                (L1dim_S_xy*L1dim_S_xy*10))
+                {
+                    if(new_index<
+                    (L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
+                    {
+                    assignable = latticepoint_assign2(new_index,1);
+                     }
+                }
+               else{
+                    assignable = 0;
+                }
+                if(assignable) {
+                    stdoutlog = fopen(stdoutlogname, "a");
+                        fprintf(stdoutlog, "assigned 3 %i  %i\n",new_index,assignable);
+                    fclose(stdoutlog);
+                }
+                counter++;
+            }
+            int diff4= 0-45+1;
+            counter = 0;
+            randstart = rand()%(diff4);
+           while(counter<diff4 && assignable!=1)
+           {
+               new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+j-1]*120+(randstart+counter)%diff4+0];
+               assignable = latticepoint_assign2(new_index,1);
+                if(assignable) {
+                    stdoutlog = fopen(stdoutlogname, "a");
+                    fprintf(stdoutlog, "assigned 4 %i  %i\n",new_index,assignable);
+                    fclose(stdoutlog);
+                }
+                counter++;
+            }
+            if(assignable)
+            {
+                latticepoint_assign(new_index,1);
+                poly_lattice_indexes[(i*lengthpercore)+j]=new_index;
+                stdoutlog = fopen(stdoutlogname, "a");
+                fprintf(stdoutlog, "guess assign %i,%i,%i\n",i,j,new_index);
+                fclose(stdoutlog);
+            }
+            else{
+                stdoutlog = fopen(stdoutlogname, "a");
+                fprintf(stdoutlog, "couldnt assign %i,%i,%i\n",i,j,new_index);
+                fclose(stdoutlog);
+                while(assignable==0)
+                {
+                    stdoutlog = fopen(stdoutlogname, "a");
+                    fprintf(stdoutlog, "trying again %i  %i\n",i,j);
+                    fclose(stdoutlog);
+                    poly_latticepoint_clear(poly_lattice_indexes, i*lengthpercore*pertrusionpercore, (1+i)*lengthpercore*pertrusionpercore); // clears all of the lattice points between the two axis points
+                    stdoutlog = fopen(stdoutlogname, "a");
+                    fprintf(stdoutlog, "ta base %i\n",poly_lattice_indexes[i*pertrusionpercore*lengthpercore]);
+                    fclose(stdoutlog);
+                    for(int k=1;k<=j;k++)
+                    {
+                        int counter = 0;
+                        int randstart = rand()%(120);
+                        assignable=0;
+                        while(counter<120 && assignable!=1)
+                        {
+                            new_index = local_en_indexes_op[poly_lattice_indexes[i*lengthpercore*pertrusionpercore+k-1]*120+(randstart+counter)%120+0];
+                            if(new_index< (L1dim_S_xy*L1dim_S_xy*(L1dim_L_z-3)))
+                            {
+                                if(new_index>L1dim_S_xy*L1dim_S_xy*6)
+                                {
+                                    assignable = latticepoint_assign2(new_index,1);
+                                }
+                            }
+                            if(assignable) {
+                                stdoutlog = fopen(stdoutlogname, "a");
+                                fprintf(stdoutlog, "assigned ta %i  %i\n",new_index,assignable);
+                                fclose(stdoutlog);
+                            }
+                            counter++;
+                        }
+                        if(assignable)
+                        {
+                            latticepoint_assign(new_index,1);
+                            poly_lattice_indexes[(i*lengthpercore)+k]=new_index;
+                            stdoutlog = fopen(stdoutlogname, "a");
+                            fprintf(stdoutlog, "TA guess assign %i,%i,%i\n",i,k,new_index);
+                            fclose(stdoutlog);
+                        }
+                        else{
+                         stdoutlog = fopen(stdoutlogname, "a");
+                            fprintf(stdoutlog, "restart ...\n");
+                            fclose(stdoutlog);
+                            break;
+                        }
+                    }
+                }
 
 
-
-
-//                //MPI_Abort(MPI_COMM_WORLD,1);
-//            }
-//        }
-//    }
-
+               //MPI_Abort(MPI_COMM_WORLD,1);
+            }
+        }
+    }
+    }
 
     stdoutlog = fopen(stdoutlogname, "a");
     fprintf(stdoutlog, "Populated lattice point init poly_core()\n");
@@ -432,7 +435,7 @@ void init_poly_cores()
     fprintf(stdoutlog, "created place holders init poly_core()\n");
     fclose(stdoutlog);
     
-    init_en_and_dist_array();
+    init_en_and_dist_array(en_choice);
     
     stdoutlog = fopen(stdoutlogname, "a");
     fprintf(stdoutlog, "Called distance array init poly_core()\n");
@@ -641,9 +644,243 @@ double poly_point_distance(int* poly_lattice_coordinates,int polymer_position_1,
     return dist_array[0][0][0];
 }
 
-void init_en_and_dist_array()
+void init_en_and_dist_array_FH_minus();
+void init_en_and_dist_array_FH_plus();
+void init_en_and_dist_array_cyclo();
+void init_en_and_dist_array(int en_choice)
 {
+    switch(en_choice) {
+        case 0:
+            init_en_and_dist_array_cyclo();
+        break;
+        case 1:
+            init_en_and_dist_array_FH_minus();
+        break;
+        case 2:
+            init_en_and_dist_array_FH_plus();
+        break;
+        default:
+            init_en_and_dist_array_cyclo();
+    }
+}
+
+void init_en_and_dist_array_FH_minus()
+{
+     stdoutlog = fopen(stdoutlogname, "a");
+    fprintf(stdoutlog, "Made it to en array and distance()\n");
+    fclose(stdoutlog);
+    
+    for (int i = 0; i < 11; i++)
+    {
+    int_en_array_pp[i]=0;
+        int_en_array_ps[i]=0;
+        int_en_array_ss[i]=0;
+        int_en_array[i]=0;
+        int_en_array_bond[i]=0;
+    }
+    
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            for (int k = 0; k < 4; k++)
+            {
+            
+                en_array_pp[i][j][k] =0;
+                en_array_ps[i][j][k] =0;
+                en_array_ss[i][j][k] =0;
+                en_array[i][j][k] =0;
+                en_array_bond[i][j][k] =0;
+                en_array_wall[i][j][k] =0;
+                
+                if (i * i + j * j + k * k == 4)
+                {
+                    en_array[i][j][k] =(int) 303.974;
+                    en_array_bond[i][j][k] =(int) 1.5*2028.01;
+                    en_array_wall[i][j][k] =(int) -95.7;
+                    
+                    en_array[i][j][k] =(int) -10;
+                    en_array_bond[i][j][k] =1.5*235.;
+                    en_array_wall[i][j][k] =(int) -9;
+                    
+                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
+                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
+                    
+                                              en_array_pp[i][j][k] =-10;
+                                             en_array_ps[i][j][k] =-7;
+                                             en_array_ss[i][j][k] =-9;
+                                             
+                                                 int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
+                                              int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
+                                             int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
+                    
+                   // en_array[i][j][k] =(int) 300;
+                    //en_array_bond[i][j][k] =(int) 2000;
+                    //en_array_wall[i][j][k] =(int) -100;
+                }
+                if (i * i + j * j + k * k == 5)
+                {
+                    en_array[i][j][k] = (int)16.3753;
+                    en_array_bond[i][j][k] =(int) 2355.75;
+                    en_array_wall[i][j][k] =(int) -75.9574;
+                    
+                    en_array[i][j][k] = (int)-8;
+                    en_array_bond[i][j][k] = 1.5*315.;
+                    en_array_wall[i][j][k] =(int) -8;
+                    
+                    
+                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
+                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
+                    
+                                         en_array_pp[i][j][k] =-8;
+                                              en_array_ps[i][j][k] =-6;
+                                              en_array_ss[i][j][k] =-7;
+                                              
+                                                  int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
+                                               int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
+                                              int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
+                    
+                    //en_array[i][j][k] = (int) 20;
+                    //en_array_bond[i][j][k] =(int) 2400;
+                    //en_array_wall[i][j][k] =(int) -100;
+                }
+                if (i * i + j * j + k * k == 6)
+                {
+                    en_array[i][j][k] = (int) 3.50123;
+                    en_array_bond[i][j][k] =(int) 3095.98;
+                    en_array_wall[i][j][k] =(int) -60.2979;
+                    
+                    en_array[i][j][k] = (int) -5;
+                    en_array_bond[i][j][k] = 1.5*410.;
+                    en_array_wall[i][j][k] =(int) -6;
+                    
+                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
+                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
+                    
+                                 en_array_pp[i][j][k] =-5;
+                               en_array_ps[i][j][k] =-4;
+                               en_array_ss[i][j][k] =-5;
+                               
+                                   int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
+                                int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
+                               int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
+                    
+                    //en_array[i][j][k] = (int)10;
+                    //en_array_bond[i][j][k] =(int) 3100;
+                    //en_array_wall[i][j][k] =(int) -10;
+                }
+                if (i * i + j * j + k * k == 8)
+                {
+                    en_array[i][j][k] = (int) 43.1734;
+                    en_array_bond[i][j][k] = (int)5475.03;
+                    en_array_wall[i][j][k] =(int) - 40.462;
+                    
+                    en_array[i][j][k] = (int) -3;
+                    en_array_bond[i][j][k] =  1.5*676.;
+                    en_array_wall[i][j][k] =(int) -4;
+                    
+                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
+                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
+                    
+                          en_array_pp[i][j][k] =-2;
+                                     en_array_ps[i][j][k] =-2;
+                                     en_array_ss[i][j][k] =-2;
+                                     
+                                         int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
+                                      int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
+                                     int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
+                    
+                    //en_array[i][j][k] = (int) 50;
+                    //en_array_bond[i][j][k] = (int)5500;
+                    //en_array_wall[i][j][k] =(int) - 50;
+                }
+                if (i * i + j * j + k * k == 9)
+                {
+                    en_array[i][j][k] = (int) 57.6302;
+                    en_array_bond[i][j][k] =(int) 7828.85;
+                    en_array_wall[i][j][k] =(int) - 34.1454;
+                    
+                    en_array[i][j][k] = (int)-2;
+                    en_array_bond[i][j][k] = 1.5*887.;
+                    en_array_wall[i][j][k] =(int) -3;
+                    
+                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
+                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
+                    
+                        en_array_pp[i][j][k] =-2;
+                                     en_array_ps[i][j][k] =-1;
+                                     en_array_ss[i][j][k] =-2;
+                                     
+                                         int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
+                                      int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
+                                     int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
+                    
+                    //en_array[i][j][k] = (int)50;
+                    //en_array_bond[i][j][k] =(int) 7800;
+                    //en_array_wall[i][j][k] =(int) - 50;
+                }
+
+            
+            if (i * i + j * j + k * k == 10)
+                {
+                    en_array[i][j][k] = (int) 57.6302;
+                    en_array_bond[i][j][k] =(int) 7828.85;
+                    en_array_wall[i][j][k] =(int) - 34.1454;
+                    
+                    en_array[i][j][k] = (int)-2;
+                    en_array_bond[i][j][k] = 1.5*1247.;
+                    en_array_wall[i][j][k] =(int) -3;
+                    
+                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
+                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
+                    
+                        en_array_pp[i][j][k] =-1;
+                                     en_array_ps[i][j][k] =-1;
+                                     en_array_ss[i][j][k] =-1;
+                                     
+                                         int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
+                                      int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
+                                     int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
+                    
+                    //en_array[i][j][k] = (int)50;
+                    //en_array_bond[i][j][k] =(int) 7800;
+                    //en_array_wall[i][j][k] =(int) - 50;
+                }
+
+            }
+        }
+    }
+
     stdoutlog = fopen(stdoutlogname, "a");
+    fprintf(stdoutlog, "en array created()\n");
+    fclose(stdoutlog);
+    
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            for (int k = 0; k < 4; k++)
+            {
+                dist_array[i][j][k] = INT_MAX;
+                dist_array[0][0][0] = INT_MAX;
+                if (i * i + j * j + k * k < 11 && i * i + j * j + k * k >=4)
+                {
+                    dist_array[i][j][k] = sqrt(i*i + j*j + k*k);
+                }
+
+            }
+        }
+    }
+    
+    stdoutlog = fopen(stdoutlogname, "a");
+    fprintf(stdoutlog, "dist array created()\n");
+    fclose(stdoutlog);
+}
+
+void init_en_and_dist_array_FH_plus()
+{
+       
+stdoutlog = fopen(stdoutlogname, "a");
     fprintf(stdoutlog, "Made it to en array and distance()\n");
     fclose(stdoutlog);
     
@@ -854,6 +1091,218 @@ void init_en_and_dist_array()
     fclose(stdoutlog);
 }
 
+void init_en_and_dist_array_cyclo()
+{
+     stdoutlog = fopen(stdoutlogname, "a");
+    fprintf(stdoutlog, "Made it to en array and distance()\n");
+    fclose(stdoutlog);
+    
+    for (int i = 0; i < 11; i++)
+    {
+    int_en_array_pp[i]=0;
+        int_en_array_ps[i]=0;
+        int_en_array_ss[i]=0;
+        int_en_array[i]=0;
+        int_en_array_bond[i]=0;
+    }
+    
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            for (int k = 0; k < 4; k++)
+            {
+            
+                en_array_pp[i][j][k] =0;
+                en_array_ps[i][j][k] =0;
+                en_array_ss[i][j][k] =0;
+                en_array[i][j][k] =0;
+                en_array_bond[i][j][k] =0;
+                en_array_wall[i][j][k] =0;
+                
+                if (i * i + j * j + k * k == 4)
+                {
+                    en_array[i][j][k] =(int) 303.974;
+                    en_array_bond[i][j][k] =(int) 1.5*2028.01;
+                    en_array_wall[i][j][k] =(int) -95.7;
+                    
+                    en_array[i][j][k] =(int) -10;
+                    en_array_bond[i][j][k] =1.5*235.;
+                    en_array_wall[i][j][k] =(int) -9;
+                    
+                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
+                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
+                    
+                                              en_array_pp[i][j][k] =-10;
+                                             en_array_ps[i][j][k] =-7;
+                                             en_array_ss[i][j][k] =-9;
+                                             
+                                                 int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
+                                              int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
+                                             int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
+                    
+                   // en_array[i][j][k] =(int) 300;
+                    //en_array_bond[i][j][k] =(int) 2000;
+                    //en_array_wall[i][j][k] =(int) -100;
+                }
+                if (i * i + j * j + k * k == 5)
+                {
+                    en_array[i][j][k] = (int)16.3753;
+                    en_array_bond[i][j][k] =(int) 2355.75;
+                    en_array_wall[i][j][k] =(int) -75.9574;
+                    
+                    en_array[i][j][k] = (int)-8;
+                    en_array_bond[i][j][k] = 1.5*315.;
+                    en_array_wall[i][j][k] =(int) -8;
+                    
+                    
+                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
+                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
+                    
+                                         en_array_pp[i][j][k] =-8;
+                                              en_array_ps[i][j][k] =-6;
+                                              en_array_ss[i][j][k] =-7;
+                                              
+                                                  int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
+                                               int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
+                                              int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
+                    
+                    //en_array[i][j][k] = (int) 20;
+                    //en_array_bond[i][j][k] =(int) 2400;
+                    //en_array_wall[i][j][k] =(int) -100;
+                }
+                if (i * i + j * j + k * k == 6)
+                {
+                    en_array[i][j][k] = (int) 3.50123;
+                    en_array_bond[i][j][k] =(int) 3095.98;
+                    en_array_wall[i][j][k] =(int) -60.2979;
+                    
+                    en_array[i][j][k] = (int) -5;
+                    en_array_bond[i][j][k] = 1.5*410.;
+                    en_array_wall[i][j][k] =(int) -6;
+                    
+                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
+                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
+                    
+                                 en_array_pp[i][j][k] =-5;
+                               en_array_ps[i][j][k] =-4;
+                               en_array_ss[i][j][k] =-5;
+                               
+                                   int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
+                                int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
+                               int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
+                    
+                    //en_array[i][j][k] = (int)10;
+                    //en_array_bond[i][j][k] =(int) 3100;
+                    //en_array_wall[i][j][k] =(int) -10;
+                }
+                if (i * i + j * j + k * k == 8)
+                {
+                    en_array[i][j][k] = (int) 43.1734;
+                    en_array_bond[i][j][k] = (int)5475.03;
+                    en_array_wall[i][j][k] =(int) - 40.462;
+                    
+                    en_array[i][j][k] = (int) -3;
+                    en_array_bond[i][j][k] =  1.5*676.;
+                    en_array_wall[i][j][k] =(int) -4;
+                    
+                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
+                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
+                    
+                          en_array_pp[i][j][k] =-2;
+                                     en_array_ps[i][j][k] =-2;
+                                     en_array_ss[i][j][k] =-2;
+                                     
+                                         int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
+                                      int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
+                                     int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
+                    
+                    //en_array[i][j][k] = (int) 50;
+                    //en_array_bond[i][j][k] = (int)5500;
+                    //en_array_wall[i][j][k] =(int) - 50;
+                }
+                if (i * i + j * j + k * k == 9)
+                {
+                    en_array[i][j][k] = (int) 57.6302;
+                    en_array_bond[i][j][k] =(int) 7828.85;
+                    en_array_wall[i][j][k] =(int) - 34.1454;
+                    
+                    en_array[i][j][k] = (int)-2;
+                    en_array_bond[i][j][k] = 1.5*887.;
+                    en_array_wall[i][j][k] =(int) -3;
+                    
+                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
+                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
+                    
+                        en_array_pp[i][j][k] =-2;
+                                     en_array_ps[i][j][k] =-1;
+                                     en_array_ss[i][j][k] =-2;
+                                     
+                                         int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
+                                      int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
+                                     int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
+                    
+                    //en_array[i][j][k] = (int)50;
+                    //en_array_bond[i][j][k] =(int) 7800;
+                    //en_array_wall[i][j][k] =(int) - 50;
+                }
+
+            
+            if (i * i + j * j + k * k == 10)
+                {
+                    en_array[i][j][k] = (int) 57.6302;
+                    en_array_bond[i][j][k] =(int) 7828.85;
+                    en_array_wall[i][j][k] =(int) - 34.1454;
+                    
+                    en_array[i][j][k] = (int)-2;
+                    en_array_bond[i][j][k] = 1.5*1247.;
+                    en_array_wall[i][j][k] =(int) -3;
+                    
+                    int_en_array[i * i + j * j + k * k] = en_array[i][j][k];
+                    int_en_array_bond[i * i + j * j + k * k] = en_array_bond[i][j][k];
+                    
+                        en_array_pp[i][j][k] =-1;
+                                     en_array_ps[i][j][k] =-1;
+                                     en_array_ss[i][j][k] =-1;
+                                     
+                                         int_en_array_pp[i * i + j * j + k * k]=en_array_pp[i][j][k];
+                                      int_en_array_ps[i * i + j * j + k * k]=en_array_ps[i][j][k];
+                                     int_en_array_ss[i * i + j * j + k * k]= en_array_ss[i][j][k];
+                    
+                    //en_array[i][j][k] = (int)50;
+                    //en_array_bond[i][j][k] =(int) 7800;
+                    //en_array_wall[i][j][k] =(int) - 50;
+                }
+
+            }
+        }
+    }
+
+    stdoutlog = fopen(stdoutlogname, "a");
+    fprintf(stdoutlog, "en array created()\n");
+    fclose(stdoutlog);
+    
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            for (int k = 0; k < 4; k++)
+            {
+                dist_array[i][j][k] = INT_MAX;
+                dist_array[0][0][0] = INT_MAX;
+                if (i * i + j * j + k * k < 11 && i * i + j * j + k * k >=4)
+                {
+                    dist_array[i][j][k] = sqrt(i*i + j*j + k*k);
+                }
+
+            }
+        }
+    }
+    
+    stdoutlog = fopen(stdoutlogname, "a");
+    fprintf(stdoutlog, "dist array created()\n");
+    fclose(stdoutlog);
+}
 
 int general_coord(int(&arr)[3], int reference_index) // output the x y and z compenent for any index
 {

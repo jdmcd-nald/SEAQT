@@ -52,8 +52,8 @@ extern int* lattice_polymer;
 extern int* poly_lattice_coordinates;
 extern int* poly_lattice_connection;
 
-const int Eglobalmin = -250000;          // minimum energy for 2D square lattice Potts model
-const int Eglobalmax = 650000;// -188/2;                       // maximum energy of Potts model
+const int Eglobalmin = -200000;          // minimum energy for 2D square lattice Potts model
+const int Eglobalmax = 500000;// -188/2;                       // maximum energy of Potts model
 const int Eglobalwidth = -(Eglobalmin - Eglobalmax);
 const int bctype = 0;                           // type of boundary condition: 0 - periodic; 1 - Braskamp Kunz
 extern int q;                               // number of different possible spin states (q-state Potts model)
@@ -117,6 +117,7 @@ extern int ret_status;
 extern double flatratio;
 extern double flatmin;
 
+extern int en_choice;
 extern int en_array[4][4][4]; // plan to hold the available energy values of the hamiltonian will contain 1's for available energies and 0 for others, made to be a size of three so all values can be looked up other wise Id have to reduce by 1
 extern int en_array_pp[4][4][4]; // plan to hold the available energy values of the hamiltonian will contain 1's for available energies and 0 for others, made to be a size of three so all values can be looked up other wise Id have to reduce by 1
 extern int en_array_ps[4][4][4]; // plan to hold the available energy values of the hamiltonian will contain 1's for available energies and 0 for others, made to be a size of three so all values can be looked up other wise Id have to reduce by 1
