@@ -201,12 +201,13 @@ const int neg_z = L1dim_S_z*3;
 const int lower_bounds = L1dim_S_xy*L1dim_S_xy*(plane_z_max-1);
 const int upper_bounds = L1dim_S_xy*L1dim_S_xy*(plane_z_min+1);
 
+// ------------System Parameter vectors---------------- Initialized in General.cpp
 extern double* density_profile_buf;
 extern double* density_profile;
 extern double* density_profile_solvent_buf;
 extern double* density_profile_solvent;
 
-extern double* indiv_rog;
+extern double* indiv_rog; // radius of gyration per chain
 extern double* indiv_rog_buf;
 
 extern double* tortuosity_buf;
@@ -222,12 +223,13 @@ extern double* rog_z;
 extern double* rog_z_buf;
 
 extern long long* visits;
-extern long long* visitdp;
+extern long long* visitdp;// unused
 extern long long* visits_buf;
 
 extern double*  endtoend;
 extern  double* endtoend_buf;
 
+// ------------values used for output maximum and minimum energy lattices found---------------- Utilized in Main.cpp
 extern int minimum_en_config;
 extern int maximum_en_config;
 extern int printed;
@@ -239,6 +241,7 @@ extern int loc_en_before;
 //const int solvent_max = numberspins_S-( L1dim_S_xy*L1dim_S_xy*(plane_z_min+1)) -(L1dim_S_xy*L1dim_S_xy*(L1dim_S_z-plane_z_max));
 //const int solvent_offset = L1dim_S_xy*L1dim_S_xy*(plane_z_min+1);
 
+// ------------vectors for outputing representative microstructures----------------
 extern double* output_table;
 extern int table_length;
 #endif
