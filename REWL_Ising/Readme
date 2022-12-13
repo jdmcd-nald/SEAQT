@@ -2,7 +2,7 @@ Created Initially 2019
 
 Single cpp file REWL code for a 6x6 Ising model 
 Code has been updated from original to be able to accept arbitrary bounds for energy
-In addition to the recombine function which autimates rejoining of seperate energy windows
+In addition to the recombine function which automates rejoining of seperate energy windows
 
 (Initiliazation) mpiCC -o (NAME) Ising.cpp (-lm \needed for Linux systems)
 
