@@ -2,7 +2,7 @@ Created 2021-2022
 
 Polymer Brush REWL code heavily modified version of Ising code distributed under the same liscence, provide credit for work used etc.
 
-Wholly seperate implementation from polymer folding code
+Wholly seperate implementation of polymer structure and available movement options from polymer folding code
 
 Example Initialization Parameters:
 
