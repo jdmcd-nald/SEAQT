@@ -1,7 +1,9 @@
 # SEAQT-REWL-Misc
-SEAQT and REWL Sample Codes 
+Steepest-Entropy Ascent Quantum Thermodynamics (SEAQT) and Replica Exchange Wang Landau (REWL) Software Packages
 
-Various program files from Jared McDonald's PhD SEAQT research work, uploaded for posterity and distributed under the below license, just give credit to published papers if work is used
+Various personally writen program files published under liscence from work performed from during my PhD SEAQT Research work. Files contain code to reproduce Density of States (DOS) structures for multi grain ising like systems, singular free floating polymer chain, polymer brushes and polymer based ion chelation. Code includes the necessary REWL energy level configuration swapping and methods for automatic printing of the compiled energy landscapes across mutiple estimators. The polymer codes also contains various movements to transform the structures to delve the available energy landscapes.
+
+Files are uploaded for posterity and distributed under the below license, just give credit to published papers if work is used
 
   License: Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
 		   https://creativecommons.org/licenses/by-sa/4.0/legalcode
